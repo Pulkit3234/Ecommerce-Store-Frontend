@@ -2,9 +2,44 @@ import { Col, Row, ListGroup, Container, Card, Button, Image } from 'react-boots
 import { Link, useHistory } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import { cartActions } from '../store/CartSlice';
+import { useEffect } from 'react';
+import axios from 'axios';
 
 const Cart = () => {
-	const { cartItems, totalItems, totalPrice } = useSelector((state) => state.cart);
+	let { cartItems, totalItems, totalPrice } = useSelector((state) => state.cart);
+	console.log(JSON.parse(localStorage.getItem('state')));
+
+	useEffect(() => {
+		/*const fetch = async () => {
+			
+			try {
+					const { data } = await axios.post('http://localhost:8000', {
+						cartItems,
+						totalPrice,
+						totalItems,
+					});
+				console.log(data);
+				dispatch()
+			}
+			catch (error) {
+				console.log(error);
+			}
+			
+		};
+
+
+
+		
+
+
+		if (localStorage.getItem('state')) {
+			fetch();
+		
+	} */
+
+		dispatch(cartActions.cartReset());
+	}, []);
+
 	console.log(totalPrice);
 	const dispatch = useDispatch();
 

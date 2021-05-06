@@ -13,7 +13,7 @@ const cartSlice = createSlice({
 				if (state.cartItems[index].countInStock === 0) {
 					return;
 				}
-				
+
 				console.log(index);
 				state.cartItems[index].countInStock = state.cartItems[index].countInStock - 1;
 				state.cartItems[index].qty++;
@@ -29,6 +29,7 @@ const cartSlice = createSlice({
 			state.totalPrice = state.totalPrice + action.payload.price;
 			state.totalPrice = Number(state.totalPrice.toFixed(2));
 			state.totalItems = state.totalItems + 1;
+			localStorage.setItem('state', JSON.stringify(state));
 		},
 
 		removeItem(state, action) {
@@ -49,12 +50,20 @@ const cartSlice = createSlice({
 
 			state.totalItems--;
 			state.totalPrice = (state.totalPrice - result.price).toFixed(2);
+			localStorage.setItem('state', JSON.stringify(state.cartItems));
 		},
 		clearCart(state, action) {
 			state.cartItems = [];
 			state.totalPrice = action.payload.totalPrice;
 			state.totalItems = action.payload.totalItems;
+			localStorage.setItem('state', JSON.stringify(state));
 		},
+		cartReset(state, action) {
+			const {cartItems, totalItems, totalPrice} = JSON.parse(localStorage.getItem('state'));
+			state.cartItems = cartItems;
+			state.totalItems = totalItems;
+			state.totalPrice = totalPrice;
+		}
 	},
 });
 
