@@ -13,7 +13,8 @@ const Product = () => {
 	const [btnToggle, setBtnToggle] = useState(false);
 
 	const cart = useSelector((state) => state.cart);
-	console.log(cart)
+	console.log(cart);
+	console.log(JSON.parse(localStorage.getItem('state')))
 
 	console.log(id);
 
@@ -25,6 +26,10 @@ const Product = () => {
 	const removeFromCartHandler = () => {
 		dispatch(cartActions.removeItem(data));
 		setBtnToggle(false);
+	};
+
+	const wishListHandler = (data) => {
+		dispatch(cartActions.addWishlist(data));
 	};
 
 	useEffect(() => {
@@ -78,8 +83,14 @@ const Product = () => {
 									Add To Cart
 								</Button>
 							)}
-							<Button variant="success" style={{ width: '20%', marginTop: '10%', marginLeft: '10px' }}>
-								Add to Wishlist
+							<Button
+								variant="success"
+								style={{ width: '20%', marginTop: '10%', marginLeft: '10px' }}
+								onClick={() => wishListHandler(data)}
+							>
+								{cart.wishlist.findIndex((item) => item._id === data._id) !== -1
+									? 'wishlistButton'
+									: 'Remove from Wishlist'}
 							</Button>
 						</Col>
 					</Row>

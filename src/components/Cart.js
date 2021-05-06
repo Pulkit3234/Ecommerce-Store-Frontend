@@ -8,9 +8,10 @@ import axios from 'axios';
 const Cart = () => {
 	let { cartItems, totalItems, totalPrice } = useSelector((state) => state.cart);
 	console.log(JSON.parse(localStorage.getItem('state')));
+	console.log(cartItems);
 
-	useEffect(() => {
-		/*const fetch = async () => {
+	/*useEffect(() => {
+		const fetch = async () => {
 			
 			try {
 					const { data } = await axios.post('http://localhost:8000', {
@@ -35,10 +36,10 @@ const Cart = () => {
 		if (localStorage.getItem('state')) {
 			fetch();
 		
-	} */
+	} 
 
 		dispatch(cartActions.cartReset());
-	}, []);
+	}, []); */
 
 	console.log(totalPrice);
 	const dispatch = useDispatch();

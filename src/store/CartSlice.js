@@ -1,11 +1,31 @@
 import { createSlice } from '@reduxjs/toolkit';
 
+//const localStoarage = JSON.parse(localStorage.getItem('state'));
+const stateCartItems = JSON.parse(localStorage.getItem('state'))?.cartItems
+	? JSON.parse(localStorage.getItem('state')).cartItems
+	: [];
+const stateTotalPrice = JSON.parse(localStorage.getItem('state'))?.totalPrice
+	? JSON.parse(localStorage.getItem('state')).totalPrice
+	: 0;
+const stateTotalItems = JSON.parse(localStorage.getItem('state'))?.totalItems
+	? JSON.parse(localStorage.getItem('state')).totalItems
+	: 0;
+const stateWishlist = JSON.parse(localStorage.getItem('state'))?.wishlist
+	? JSON.parse(localStorage.getItem('state')).wishlist
+	: [];
+
 const cartSlice = createSlice({
 	name: 'cart',
-	initialState: { cartItems: [], totalPrice: 0, totalItems: 0 },
+	initialState: {
+		cartItems: stateCartItems,
+		totalPrice: stateTotalPrice,
+		totalItems: stateTotalItems,
+		wishlist: stateWishlist,
+	},
 	reducers: {
 		addItem(state, action) {
 			console.log(action.payload.price);
+			console.log(state);
 
 			if (state.cartItems.findIndex((item) => item._id === action.payload._id) !== -1) {
 				console.log('hello');
@@ -25,15 +45,15 @@ const cartSlice = createSlice({
 				state.cartItems.push(action.payload);
 				console.log(action.payload.price);
 			}
+			console.log(state.totalPrice);
+			state.totalPrice = Number((state.totalPrice + action.payload.price).toFixed(2));
+			// Number(state.totalPrice).toFixed(2);
 
-			state.totalPrice = state.totalPrice + action.payload.price;
-			state.totalPrice = Number(state.totalPrice.toFixed(2));
 			state.totalItems = state.totalItems + 1;
 			localStorage.setItem('state', JSON.stringify(state));
 		},
 
 		removeItem(state, action) {
-			console.log('hi');
 			const result = state.cartItems.find((item) => item._id === action.payload._id);
 			const resultIndex = state.cartItems.findIndex((item) => item._id === action.payload._id);
 			if (result.qty === 1) {
@@ -49,8 +69,9 @@ const cartSlice = createSlice({
 			}
 
 			state.totalItems--;
-			state.totalPrice = (state.totalPrice - result.price).toFixed(2);
+			state.totalPrice = Number((state.totalPrice - result.price).toFixed(2));
 			localStorage.setItem('state', JSON.stringify(state.cartItems));
+			console.log(JSON.parse(localStorage.getItem('state')).totalItems);
 		},
 		clearCart(state, action) {
 			state.cartItems = [];
@@ -59,11 +80,14 @@ const cartSlice = createSlice({
 			localStorage.setItem('state', JSON.stringify(state));
 		},
 		cartReset(state, action) {
-			const {cartItems, totalItems, totalPrice} = JSON.parse(localStorage.getItem('state'));
+			const { cartItems, totalItems, totalPrice } = JSON.parse(localStorage.getItem('state'));
 			state.cartItems = cartItems;
 			state.totalItems = totalItems;
 			state.totalPrice = totalPrice;
-		}
+		},
+		addWishlist(state, action) {
+			state.wishlist.push(action.payload);
+		},
 	},
 });
 

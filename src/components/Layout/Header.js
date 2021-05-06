@@ -1,10 +1,22 @@
 import { Navbar, NavDropdown, Nav } from 'react-bootstrap';
 import { NavLink, Link } from 'react-router-dom';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
+import { authActions } from '../../store/AuthSlice';
+import { useHistory } from 'react-router-dom';
 
 const Header = () => {
 	const { totalItems } = useSelector((state) => state.cart);
+	const { isAuth, token } = useSelector((state) => state.auth);
+	const dispatch = useDispatch();
+	const history = useHistory();
+	console.log(isAuth);
 	//console.log(cart);
+
+	const signOutHandler = () => {
+		dispatch(authActions.signout());
+		history.push('/signin')
+	};
+
 	return (
 		<>
 			<div>
@@ -23,17 +35,25 @@ const Header = () => {
 									<i class="fas fa-home"></i>Home
 								</Link>
 							</Nav.Link>
-							<Nav.Link>
-								<Link to="/signin" style={{ textDecoration: 'none', color: 'white' }}>
-									<i class="fas fa-sign-in-alt"></i>SignIn
-								</Link>
-							</Nav.Link>
+							{isAuth ? (
+								<Nav.Link style={{ textDecoration: 'none', color: 'white' }} onClick={signOutHandler}>
+									Sign Out
+								</Nav.Link>
+							) : (
+								<Nav.Link>
+									<Link to="/signin" style={{ textDecoration: 'none', color: 'white' }}>
+										<i class="fas fa-sign-in-alt"></i>SignIn
+									</Link>
+								</Nav.Link>
+							)}
 
-							<Nav.Link>
-								<Link to="/customer/account" style={{ textDecoration: 'none', color: 'white' }}>
-									My Account
-								</Link>
-							</Nav.Link>
+							{isAuth && (
+								<Nav.Link>
+									<Link to="/customer/account" style={{ textDecoration: 'none', color: 'white' }}>
+										My Account
+									</Link>
+								</Nav.Link>
+							)}
 							<Nav.Link>
 								<Link to="/cart" style={{ textDecoration: 'none', color: 'white' }}>
 									<i class="fas fa-cart-plus"></i>

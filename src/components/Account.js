@@ -1,6 +1,26 @@
 import { Container, Card, Button, Accordion } from 'react-bootstrap';
+import { useSelector } from 'react-redux';
+import { NavLink } from 'react-router-dom';
+
 
 const Account = () => {
+	const { wishlist } = useSelector((state) => state.cart);
+	const { name, email } = useSelector((state) => state.auth);
+	
+	console.log('account', name, email);
+	console.log(name, email);
+
+	
+	const wishlistItems = wishlist.map((item) => {
+		return (
+			<div>
+				<NavLink to={`/${item.id}`}>
+					{item.name}
+					<span>{item.price}</span>
+				</NavLink>
+			</div>
+		);
+	});
 	return (
 		<>
 			<Container style={{ position: 'fixed', top: '10%', left: '30%' }}>
@@ -8,8 +28,12 @@ const Account = () => {
 					<Card.Body>
 						<Card.Title>Account Information</Card.Title>
 						<Card.Text>
-							<h5>Name - </h5>
-							<h5>Email - </h5>
+							<h5>
+								Name - <span>{name}</span>
+							</h5>
+							<h5>
+								Email - <span>{email}</span>
+							</h5>
 							<h3> - </h3>
 						</Card.Text>
 						<Button variant="primary">Edit Information</Button>
@@ -26,10 +50,7 @@ const Account = () => {
 								</Accordion.Toggle>
 							</Card.Header>
 							<Accordion.Collapse eventKey="0">
-								<Card.Body>
-									Hello! I'm the body
-									<h2>Hello</h2>
-								</Card.Body>
+								<Card.Body>{wishlistItems}</Card.Body>
 							</Accordion.Collapse>
 						</Card>
 					</Accordion>

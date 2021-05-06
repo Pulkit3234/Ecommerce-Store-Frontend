@@ -1,67 +1,144 @@
 import { Form, Button } from 'react-bootstrap';
-import { useState } from 'react';
+import { useState, useRef } from 'react';
+import axios from 'axios';
+import { authActions } from '../store/AuthSlice';
+import { useDispatch } from 'react-redux';
+import { useHistory } from 'react-router-dom';
 
 const SignIn = () => {
 	const [toggle, setToggle] = useState(false);
+	const [email, setEmail] = useState('');
+	const [name, setName] = useState('');
+	const [password, setPassword] = useState('');
+	const emailRef = useRef();
+	const dispatch = useDispatch();
+	const history = useHistory();
 
-	const form = (
+	const onSubmitHandler = async (e) => {
+		e.preventDefault();
+
+		if (toggle) {
+			const { data } = await axios.post('http://localhost:8000/signup', {
+				name,
+				email,
+				password,
+			});
+			if ((data.message = 'User registered')) {
+				setEmail('');
+				setPassword('');
+				setToggle(!toggle);
+			}
+		} else {
+			const { data } = await axios.post('http://localhost:8000/signin', {
+				email,
+				password,
+			});
+			console.log(data);
+
+			if (data.token) {
+				dispatch(authActions.signin({ token: data.token, isAuth: true, name: data.name, email: data.email }));
+				history.push('/');
+			}
+		}
+	};
+
+	const signin = (
 		<div style={{ width: '40%', marginLeft: '30%', marginTop: '5%' }}>
 			<Form>
 				<Form.Group controlId="formBasicEmail">
-					<Form.Label>Email address</Form.Label>
-					<Form.Control type="email" placeholder="Enter email" />
-					<Form.Text className="text-muted">We'll never share your email with anyone else.</Form.Text>
+					<div style={{ display: 'flex', flexDirection: 'column', marginTop: '10px' }}>
+						<label>Email address</label>
+						<input
+							type="email"
+							placeholder="Enter email"
+							value={email}
+							onChange={(e) => setEmail(e.target.value)}
+							style={{ width: '40%' }}
+						/>
+					</div>
 				</Form.Group>
 
 				<Form.Group controlId="formBasicPassword">
-					<Form.Label>Password</Form.Label>
-					<Form.Control type="password" placeholder="Password" />
+					<div style={{ display: 'flex', flexDirection: 'column', marginTop: '10px' }}>
+						<label>Password</label>
+						<input
+							type="password"
+							placeholder="Password"
+							value={password}
+							onChange={(e) => setPassword(e.target.value)}
+							style={{ width: '40%' }}
+						/>
+					</div>
 				</Form.Group>
 
-				<Button variant="primary" type="submit">
+				<Button variant="primary" type="submit" onClick={onSubmitHandler}>
 					Sign In
 				</Button>
 				<Form.Group style={{ marginTop: '15px' }}>
-					<h4 onClick={() => setToggle(true)} style={{ cursor: 'pointer' }}>
+					<h6 onClick={() => setToggle(true)} style={{ cursor: 'pointer' }}>
 						New User? Sign Up Now
-					</h4>
+					</h6>
 				</Form.Group>
 			</Form>
 		</div>
 	);
 
-	const form1 = (
+	const signup = (
 		<div style={{ width: '40%', marginLeft: '30%', marginTop: '5%' }}>
 			<Form>
 				<Form.Group controlId="formBasicEmail">
-					<Form.Label>Name</Form.Label>
-					<Form.Control type="email" placeholder="Enter email" />
+					<div style={{ display: 'flex', flexDirection: 'column' }}>
+						<label>Name</label>
+						<input
+							type="name"
+							placeholder="Enter name"
+							value={name}
+							onChange={(e) => setName(e.target.value)}
+							style={{ width: '40%' }}
+						/>
+					</div>
+
 					<Form.Text className="text-muted">We'll never share your name with anyone else.</Form.Text>
 				</Form.Group>
 
-				<Form.Group controlId="formBasicEmail">
-					<Form.Label>Email address</Form.Label>
-					<Form.Control type="email" placeholder="Enter email" />
-					<Form.Text className="text-muted">We'll never share your email with anyone else.</Form.Text>
-				</Form.Group>
+				<div style={{ display: 'flex', flexDirection: 'column', marginTop: '10px' }}>
+					<label>Email address</label>
+					<input
+						type="email"
+						placeholder="Enter email"
+						value={email}
+						onChange={(e) => setEmail(e.target.value)}
+						style={{ width: '40%' }}
+					/>
+				</div>
+
+				<Form.Text className="text-muted">We'll never share your email with anyone else.</Form.Text>
 
 				<Form.Group controlId="formBasicPassword">
-					<Form.Label>Password</Form.Label>
-					<Form.Control type="password" placeholder="Password" />
+					<div style={{ display: 'flex', flexDirection: 'column', marginTop: '10px' }}>
+						<label>Password</label>
+						<input
+							type="password"
+							placeholder="Password"
+							value={password}
+							onChange={(e) => setPassword(e.target.value)}
+							style={{ width: '40%' }}
+						/>
+					</div>
 				</Form.Group>
 
-				<Button variant="primary" type="submit">
+				<Button variant="primary" type="submit" onClick={onSubmitHandler}>
 					Sign Up
 				</Button>
 				<Form.Group style={{ marginTop: '15px' }}>
-					<h4 onClick={() => setToggle(false)} style={{ cursor: 'pointer' }}>
+					<h6 onClick={() => setToggle(false)} style={{ cursor: 'pointer' }}>
 						Already Registered ? Sign In Now
-					</h4>
+					</h6>
 				</Form.Group>
 			</Form>
 		</div>
 	);
-	return <>{toggle ? form1 : form}</>;
+	return <>{toggle ? signup : signin}</>;
 };
 
 export default SignIn;

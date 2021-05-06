@@ -8,20 +8,23 @@ import Checkout from './components/Checkout';
 import Signin from './components/Signin';
 import Account from './components/Account';
 import Footer from './components/Layout/Footer';
+import Order from './components/Order'
 
 function App() {
 	return (
 		<>
 			<Header />
 			<Switch>
-				<Route path='/customer/account'>
-					<Account/>
-
+				<Route path="/cart/checkout/order" exact>
+					<Order/>
 				</Route>
-				<Route path="/signin">
+				<Route path="/customer/account" exact>
+					<Account />
+				</Route>
+				<Route path="/signin" exact>
 					<Signin />
 				</Route>
-				<Route path="/cart/checkout">
+				<Route path="/cart/checkout" exact>
 					<Checkout />
 				</Route>
 				<Route path="/cart" exact>
@@ -34,8 +37,7 @@ function App() {
 					<Product />
 				</Route>
 			</Switch>
-			<Footer/>
-			
+			<Footer />
 		</>
 	);
 }
