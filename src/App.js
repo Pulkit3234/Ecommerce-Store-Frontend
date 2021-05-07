@@ -9,14 +9,23 @@ import Signin from './components/Signin';
 import Account from './components/Account';
 import Footer from './components/Layout/Footer';
 import Order from './components/Order'
+import Payment from './components/Payment';
+import OrderSuccess from './components/OrderSuccess';
 
 function App() {
 	return (
 		<>
 			<Header />
 			<Switch>
-				<Route path="/cart/checkout/order/:id" exact>
-					<Order/>
+				<Route path='/order/:id/success' exact>
+					<OrderSuccess/>
+				</Route>
+				<Route path="/order/:id" exact>
+					<Payment />
+				</Route>
+
+				<Route path="/cart/checkout/order" exact>
+					<Order />
 				</Route>
 				<Route path="/customer/account" exact>
 					<Account />
@@ -48,3 +57,6 @@ export default App;
 /*<Route to="/product">
 				<Product />
 			</Route> */
+
+
+			/* */

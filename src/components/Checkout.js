@@ -4,13 +4,15 @@ import { useSelector, useDispatch } from 'react-redux';
 import Signin from './Signin';
 import axios from 'axios';
 import { useState, useRef, useEffect } from 'react';
-import { orderActions } from '../store/OrderSlice';
+import { orderActions, order } from '../store/OrderSlice';
 
 const Checkout = () => {
 	const history = useHistory();
 	const { isAuth, token } = useSelector((state) => state.auth);
 	const cartState = useSelector((state) => state.cart);
 	const dispatch = useDispatch();
+	  
+	console.log(JSON.parse(localStorage.getItem('authState'))?.token)
 
 	const addressRef = useRef();
 	const countryRef = useRef();
@@ -52,37 +54,9 @@ const Checkout = () => {
 			})
 		);
 
-		const sendCartData = async () => {
-			try {
-				const { data } = await axios.post(
-					'http://localhost:8000/cart',
-					{
-						...cartState,
-						shippingAddress: {
-							address: addressRef.current.value,
-							country: countryRef.current.value,
-							city: cityRef.current.value,
-							postalCode: postalCodeRef.current.value,
-						},
-					},
-					{
-						headers: {
-							Authorization: `Bearer ${token}`,
-						},
-					}
-				);
-
-				
-				console.log(data);
-				dispatch(orderActions.currentOrderHandler(data));
-
-			} catch (error) {
-				console.log(error);
-			}
-		};
-
-		sendCartData();
-		history.push(`/cart/checkout/order/${JSON.parse(localStorage.getItem('order'))._id}`);
+		history.push('/cart/checkout/order');
+		
+		
 	};
 
 	return (

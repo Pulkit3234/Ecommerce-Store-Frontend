@@ -2,15 +2,13 @@ import { Container, Card, Button, Accordion } from 'react-bootstrap';
 import { useSelector } from 'react-redux';
 import { NavLink } from 'react-router-dom';
 
-
 const Account = () => {
 	const { wishlist } = useSelector((state) => state.cart);
 	const { name, email } = useSelector((state) => state.auth);
-	
+
 	console.log('account', name, email);
 	console.log(name, email);
 
-	
 	const wishlistItems = wishlist.map((item) => {
 		return (
 			<div>
@@ -29,10 +27,10 @@ const Account = () => {
 						<Card.Title>Account Information</Card.Title>
 						<Card.Text>
 							<h5>
-								Name - <span>{name}</span>
+								Name - <span>{JSON.parse(localStorage.getItem('authState')).name}</span>
 							</h5>
 							<h5>
-								Email - <span>{email}</span>
+								Email - <span>{JSON.parse(localStorage.getItem('authState')).email}</span>
 							</h5>
 							<h3> - </h3>
 						</Card.Text>
