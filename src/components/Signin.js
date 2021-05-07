@@ -4,6 +4,7 @@ import axios from 'axios';
 import { authActions } from '../store/AuthSlice';
 import { useDispatch } from 'react-redux';
 import { useHistory } from 'react-router-dom';
+import Cart from './Cart';
 
 const SignIn = () => {
 	const [toggle, setToggle] = useState(false);
@@ -39,7 +40,12 @@ const SignIn = () => {
 				dispatch(authActions.signin({ token: data.token, isAuth: true, name: data.name, email: data.email }));
 				history.push('/');
 			}
+
+			
 		}
+
+		
+
 	};
 
 	const signin = (

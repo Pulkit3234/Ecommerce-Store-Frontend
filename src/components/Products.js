@@ -3,28 +3,53 @@ import { useEffect, useState } from 'react';
 import axios from 'axios';
 import { useHistory } from 'react-router-dom';
 import { cartActions } from '../store/CartSlice';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
+
 
 const Products = () => {
 	const [products, setProducts] = useState([]);
 	const [loading, setLoading] = useState(true);
+	const {isAuth} = useSelector(state => state.auth);
 	const history = useHistory();
 	const dispatch = useDispatch();
 	useEffect(() => {
 		const fetch = async () => {
+
 			try {
+
 				const { data } = await axios.get('http://localhost:8000/products');
 				console.log(data);
 				setProducts(data);
 				setLoading(false);
+
 			} catch (error) {
 				console.log(error);
 			}
 		};
 
 		fetch();
+
+		/*const fetchCart = async () => {
+			try {
+				
+				const { data } = await axios.get('http://localhost:8000/cart');
+				if (data) {
+					dispatch(cartActions.cartReset(data));
+				}
+			} catch (error) {
+				console.log(error);
+			}
+			
+		};
+
+		if(isAuth){
+		fetchCart();
+		
+		} */
+		
 		
 	}, []);
+
 	console.log(products);
 
 	const clickHandler = (id) => {
