@@ -1,17 +1,23 @@
 import { Col, Row, Container, ListGroup, Card, Button } from 'react-bootstrap';
-import { useSelector } from 'react-redux';
-import { useEffect } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
+import { useEffect, useState } from 'react';
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { useHistory } from 'react-router-dom';
+import axios from 'axios';
+import { orderActions } from '../store/OrderSlice';
+import { cartActions } from '../store/CartSlice';
 
 const PayPalButton = window.paypal.Buttons.driver('react', { React, ReactDOM });
 
 const Payment = () => {
 	const { isAuth } = useSelector((state) => state.auth);
+	const [paymentStatus, setPaymentStatus] = useState(false);
 	const { currentOrder: order } = useSelector((state) => state.order);
+	console.log(order);
 	const state = useSelector((state) => state.order);
 	const history = useHistory();
+	const dispatch = useDispatch();
 
 	console.log(state.currentOrder.cartItems);
 
@@ -22,6 +28,7 @@ const Payment = () => {
 				{
 					description: 'Shop All Order',
 					amount: {
+						
 						value: order.totalPrice,
 					},
 				},
@@ -30,13 +37,14 @@ const Payment = () => {
 	};
 
 	const onApprove = async (data, actions) => {
-		actions.order.capture();
+		const result = await actions.order.capture();
+		console.log('approved', result);
 		try {
 			const { data } = await axios.post(
-				'http://localhost:8000/cart',
+				'http://localhost:8000/cart/orderstatus',
 				{
 					isPaid: true,
-					orderId: order._id,
+					orderId: JSON.parse(localStorage.getItem('order'))?._id,
 				},
 				{
 					headers: {
@@ -51,6 +59,12 @@ const Payment = () => {
 		} catch (error) {
 			console.log(error.message);
 		}
+		//RESET THE CART TOO AFTER PAYMENT.
+		setPaymentStatus(true);
+		dispatch(cartActions.clearCart());
+		localStorage.removeItem()
+		
+		
 	};
 
 	const onError = (error) => {
@@ -127,18 +141,25 @@ const Payment = () => {
 										<p style={{ fontWeight: 'bold' }}>Total Price - {order?.totalPrice} </p>
 									</Card.Text>
 
-									<div>
-										{JSON.parse(localStorage.getItem('order')).paymentMethod === 'paypal' &&
-										order.isPaid === false ? (
-											<PayPalButton
-												createOrder={(data, actions) => createOrder(data, actions)}
-												onApprove={(data, actions) => onApprove(data, actions)}
-												onError={(error) => onError(error)}
-											/>
-										) : (
-											''
-										)}
-									</div>
+									{!paymentStatus && (
+										<div>
+											{JSON.parse(localStorage.getItem('order')).paymentMethod === 'paypal' &&
+											order.isPaid === false ? (
+												<PayPalButton
+													createOrder={(data, actions) => createOrder(data, actions)}
+													onApprove={(data, actions) => onApprove(data, actions)}
+													onError={(error) => onError(error)}
+												/>
+											) : (
+												''
+											)}
+										</div>
+									)}
+									{paymentStatus && (
+										<div>
+											<h2>Order - Paid</h2>
+										</div>
+									)}
 								</Card.Body>
 							</Card>
 						</Col>

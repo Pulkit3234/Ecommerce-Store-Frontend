@@ -3,6 +3,7 @@ import { NavLink, Link } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import { authActions } from '../../store/AuthSlice';
 import { useHistory } from 'react-router-dom';
+import { cartActions } from '../../store/CartSlice';
 
 const Header = () => {
 	const { totalItems } = useSelector((state) => state.cart);
@@ -13,8 +14,10 @@ const Header = () => {
 	//console.log(cart);
 
 	const signOutHandler = () => {
+		dispatch(cartActions.clearCart());
 		dispatch(authActions.signout());
-		history.push('/signin')
+		
+		history.push('/signin');
 	};
 
 	return (

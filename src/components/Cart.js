@@ -4,42 +4,17 @@ import { useSelector, useDispatch } from 'react-redux';
 import { cartActions } from '../store/CartSlice';
 import { useEffect } from 'react';
 import axios from 'axios';
+import { authActions } from '../store/AuthSlice';
 
 const Cart = () => {
 	let { cartItems, totalItems, totalPrice } = useSelector((state) => state.cart);
 	console.log(JSON.parse(localStorage.getItem('state')));
+
 	console.log(cartItems);
-
-	/*useEffect(() => {
-		const fetch = async () => {
-			
-			try {
-					const { data } = await axios.post('http://localhost:8000', {
-						cartItems,
-						totalPrice,
-						totalItems,
-					});
-				console.log(data);
-				dispatch()
-			}
-			catch (error) {
-				console.log(error);
-			}
-			
-		};
+	const { isAuth } = useSelector((state) => state.auth);
+	console.log(isAuth)
 
 
-
-		
-
-
-		if (localStorage.getItem('state')) {
-			fetch();
-		
-	} 
-
-		dispatch(cartActions.cartReset());
-	}, []); */
 
 	console.log(totalPrice);
 	const dispatch = useDispatch();

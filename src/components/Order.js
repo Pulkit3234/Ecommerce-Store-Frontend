@@ -14,7 +14,7 @@ const Order = () => {
 	const history = useHistory();
 	const inputRef = useRef();
 	const [payment, setPayment] = useState('');
-	console.log(state.currentOrder.cartItems);
+	
 	const { address, city, postalCode, country } = JSON.parse(localStorage.getItem('shippingAddress'));
 
 	const placeOrderHandler = () => {
@@ -39,7 +39,7 @@ const Order = () => {
 
 				console.log(data);
 				dispatch(orderActions.currentOrderHandler(data));
-				history.push(`/order/:${order._id}/success`);
+				history.push(`/order/${order._id}`);
 			} catch (error) {
 				console.log(error.message);
 			}

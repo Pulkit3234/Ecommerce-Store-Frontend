@@ -75,8 +75,8 @@ const cartSlice = createSlice({
 		},
 		clearCart(state, action) {
 			state.cartItems = [];
-			state.totalPrice = action.payload.totalPrice;
-			state.totalItems = action.payload.totalItems;
+			state.totalPrice = 0;
+			state.totalItems = 0;
 			localStorage.setItem('state', JSON.stringify(state));
 		},
 		cartReset(state, action) {
