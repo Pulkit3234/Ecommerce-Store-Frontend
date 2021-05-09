@@ -12,9 +12,7 @@ const Cart = () => {
 
 	console.log(cartItems);
 	const { isAuth } = useSelector((state) => state.auth);
-	console.log(isAuth)
-
-
+	console.log(isAuth);
 
 	console.log(totalPrice);
 	const dispatch = useDispatch();
@@ -68,7 +66,7 @@ const Cart = () => {
 								<div>
 									<i
 										class="fas fa-minus-circle"
-										style={{ color: 'blue' }}
+										style={{ color: 'blue', cursor: 'pointer' }}
 										onClick={() => decrementHandler(item)}
 									></i>
 								</div>
@@ -76,7 +74,7 @@ const Cart = () => {
 								<div>
 									<i
 										class="fas fa-plus-circle"
-										style={{ color: 'blue' }}
+										style={{ color: 'blue', cursor: 'pointer' }}
 										onClick={() => incrementHandler(item)}
 									></i>
 								</div>
@@ -103,7 +101,7 @@ const Cart = () => {
 						<Card style={{ width: '18rem' }}>
 							<Card.Body>
 								<Card.Title>
-									Total Amount - <span>{totalPrice}</span>
+									Total Amount - <span>${totalPrice}</span>
 								</Card.Title>
 
 								<Button

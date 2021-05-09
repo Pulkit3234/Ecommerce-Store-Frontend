@@ -24,7 +24,7 @@ const Header = () => {
 		<>
 			<div>
 				<Navbar className="navbar navbar-expand-lg navbar-dark bg-primary">
-					<Navbar.Brand href="#home">
+					<Navbar.Brand >
 						<div style={{ display: 'inline-block', paddingRight: '15px' }}>
 							<i class="fas fa-shopping-basket"></i>
 						</div>
@@ -53,7 +53,7 @@ const Header = () => {
 							{isAuth && (
 								<Nav.Link>
 									<Link to="/customer/account" style={{ textDecoration: 'none', color: 'white' }}>
-										My Account
+										<i class="fas fa-user-circle" style={{marginRight : '5px'}}></i>My Account
 									</Link>
 								</Nav.Link>
 							)}

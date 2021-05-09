@@ -7,6 +7,7 @@ import { useHistory } from 'react-router-dom';
 import axios from 'axios';
 import { orderActions } from '../store/OrderSlice';
 import { cartActions } from '../store/CartSlice';
+import Stripe from './Stripe';
 
 const PayPalButton = window.paypal.Buttons.driver('react', { React, ReactDOM });
 
@@ -19,26 +20,7 @@ const Payment = () => {
 	const history = useHistory();
 	const dispatch = useDispatch();
 
-	console.log(state.currentOrder.cartItems);
-
-	/////////////////Paypal Setup
-	const createOrder = (data, actions) => {
-		return actions.order.create({
-			purchase_units: [
-				{
-					description: 'Shop All Order',
-					amount: {
-						
-						value: order.totalPrice,
-					},
-				},
-			],
-		});
-	};
-
-	const onApprove = async (data, actions) => {
-		const result = await actions.order.capture();
-		console.log('approved', result);
+	const paymentSuccess = async () => {
 		try {
 			const { data } = await axios.post(
 				'http://localhost:8000/cart/orderstatus',
@@ -55,6 +37,7 @@ const Payment = () => {
 
 			console.log(data);
 			dispatch(orderActions.currentOrderHandler(data));
+
 			history.push(`/order/${JSON.parse(localStorage.getItem('order'))?._id}/success`);
 		} catch (error) {
 			console.log(error.message);
@@ -62,9 +45,29 @@ const Payment = () => {
 		//RESET THE CART TOO AFTER PAYMENT.
 		setPaymentStatus(true);
 		dispatch(cartActions.clearCart());
-		localStorage.removeItem()
-		
-		
+	};
+
+	console.log(state.currentOrder.cartItems);
+
+	/////////////////Paypal Setup
+	const createOrder = (data, actions) => {
+		return actions.order.create({
+			purchase_units: [
+				{
+					description: 'Shop All Order',
+					amount: {
+						value: order.totalPrice,
+					},
+				},
+			],
+		});
+	};
+
+	const onApprove = async (data, actions) => {
+		const result = await actions.order.capture();
+		console.log('approved', result);
+
+		paymentSuccess();
 	};
 
 	const onError = (error) => {
@@ -84,7 +87,7 @@ const Payment = () => {
 				</div>
 				<div style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-evenly' }}>
 					<div>{item.name}</div>
-					<div style={{ marginLeft: '60px' }}>{item.price}</div>
+					<div style={{ marginLeft: '60px' }}>${item.price}</div>
 				</div>
 				<div>
 					<div style={{ marginLeft: '60px' }}>{item.qty}</div>
@@ -107,7 +110,7 @@ const Payment = () => {
 							}}
 						>{`OrderId - ${order?._id}`}</h2>
 					</Row>
-					<Row style={{ overflowX: 'hidden', maxWidth: '100%' }}>
+					<Row style={{ overflowX: 'hidden', maxWidth: '100%', marginBottom: '50px' }}>
 						<Col style={{ marginLeft: '20px', maxWidth: '100%' }}>
 							<Card style={{ width: '45rem', marginTop: '20px' }}>
 								<Card.Body>
@@ -136,9 +139,23 @@ const Payment = () => {
 									<Card.Title>
 										<h3>Order Summary</h3>
 									</Card.Title>
+									<div>
+										<Card.Body>
+											<Col>
+												<Card style={{ width: '100%', fontWeight: 'bold' }}>
+													<Card.Body>
+														<Card.Title>Order Items - </Card.Title>
+
+														<Card.Text>{orderItems}</Card.Text>
+													</Card.Body>
+												</Card>
+											</Col>
+										</Card.Body>
+									</div>
+
 									<Card.Text>
 										<p style={{ fontWeight: 'bold' }}>Total Items - {order?.totalItems}</p>
-										<p style={{ fontWeight: 'bold' }}>Total Price - {order?.totalPrice} </p>
+										<p style={{ fontWeight: 'bold' }}>Total Price - ${order?.totalPrice} </p>
 									</Card.Text>
 
 									{!paymentStatus && (
@@ -155,21 +172,26 @@ const Payment = () => {
 											)}
 										</div>
 									)}
-									{paymentStatus && (
+									{!paymentStatus && (
+										<div>
+											{JSON.parse(localStorage.getItem('order')).paymentMethod === 'stripe' &&
+											order.isPaid === false ? (
+												<Stripe
+													payment={() => setPaymentStatus(true)}
+													data={JSON.parse(localStorage.getItem('order'))}
+													paymentSuccess={paymentSuccess}
+												/>
+											) : (
+												''
+											)}
+										</div>
+									)}
+
+									{!paymentStatus && (
 										<div>
 											<h2>Order - Paid</h2>
 										</div>
 									)}
-								</Card.Body>
-							</Card>
-						</Col>
-
-						<Col style={{ marginLeft: '20px' }}>
-							<Card style={{ width: '45rem', marginTop: '20px', fontWeight: 'bold' }}>
-								<Card.Body>
-									<Card.Title>Order Items - </Card.Title>
-
-									<Card.Text>{orderItems}</Card.Text>
 								</Card.Body>
 							</Card>
 						</Col>

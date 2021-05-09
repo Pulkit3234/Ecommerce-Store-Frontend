@@ -39,7 +39,8 @@ const Order = () => {
 
 				console.log(data);
 				dispatch(orderActions.currentOrderHandler(data));
-				history.push(`/order/${order._id}`);
+				
+				history.push(`/order/${JSON.parse(localStorage.getItem('order'))._id}`);
 			} catch (error) {
 				console.log(error.message);
 			}
@@ -63,7 +64,7 @@ const Order = () => {
 				</div>
 				<div style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-evenly' }}>
 					<div>{item.name}</div>
-					<div style={{ marginLeft: '60px' }}>{item.price}</div>
+					<div style={{ marginLeft: '60px' }}>${item.price}</div>
 				</div>
 				<div>
 					<div style={{ marginLeft: '60px' }}>{item.qty}</div>
@@ -112,7 +113,7 @@ const Order = () => {
 													Total Items - {JSON.parse(localStorage.getItem('state')).totalItems}
 												</p>
 												<p style={{ fontWeight: 'bold' }}>
-													Total Price - {JSON.parse(localStorage.getItem('state')).totalPrice}
+													Total Price - ${JSON.parse(localStorage.getItem('state')).totalPrice}
 												</p>
 											</Card.Text>
 											<div class="form-check" style={{ marginBottom: '15px' }}>

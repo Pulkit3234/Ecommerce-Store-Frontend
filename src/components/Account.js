@@ -24,7 +24,7 @@ const Account = () => {
 			<Container style={{ position: 'fixed', top: '10%', left: '30%' }}>
 				<Card style={{ width: '30rem' }}>
 					<Card.Body>
-						<Card.Title>Account Information</Card.Title>
+						<Card.Title><i class="fas fa-user-circle" style={{marginRight : '15px'}}></i>Account Information</Card.Title>
 						<Card.Text>
 							<h5>
 								Name - <span>{JSON.parse(localStorage.getItem('authState')).name}</span>
