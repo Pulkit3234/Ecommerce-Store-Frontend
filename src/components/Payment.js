@@ -51,12 +51,14 @@ const Payment = () => {
 
 	/////////////////Paypal Setup
 	const createOrder = (data, actions) => {
+		console.log('order created');
 		return actions.order.create({
 			purchase_units: [
 				{
 					description: 'Shop All Order',
 					amount: {
 						value: order.totalPrice,
+						currency: 'INR',
 					},
 				},
 			],
@@ -110,30 +112,9 @@ const Payment = () => {
 							}}
 						>{`OrderId - ${order?._id}`}</h2>
 					</Row>
-					<Row style={{ overflowX: 'hidden', maxWidth: '100%', marginBottom: '50px' }}>
-						<Col style={{ marginLeft: '20px', maxWidth: '100%' }}>
-							<Card style={{ width: '45rem', marginTop: '20px' }}>
-								<Card.Body>
-									<Card.Title>Shipping Details</Card.Title>
-									<Card.Text>
-										<h6>
-											Address - <span>{order.shippingAddress?.address}</span>
-										</h6>
-										<h6>
-											Country - <span>{order.shippingAddress?.country}</span>
-										</h6>
-										<h6>
-											City - <span>{order.shippingAddress?.city}</span>
-										</h6>
-										<h6>
-											Postal Code - <span>{order.shippingAddress?.postalCode}</span>
-										</h6>
-									</Card.Text>
-								</Card.Body>
-							</Card>
-						</Col>
 
-						<Col style={{ marginLeft: '20px' }}>
+					<Row style={{ overflowX: 'hidden', maxWidth: '100%', marginBottom: '50px' }}>
+						<Col style={{ marginLeft: '20px', zIndex: '0.5' }}>
 							<Card style={{ width: '45rem', marginTop: '20px' }}>
 								<Card.Body>
 									<Card.Title>
@@ -152,21 +133,67 @@ const Payment = () => {
 											</Col>
 										</Card.Body>
 									</div>
-
 									<Card.Text>
 										<p style={{ fontWeight: 'bold' }}>Total Items - {order?.totalItems}</p>
 										<p style={{ fontWeight: 'bold' }}>Total Price - ${order?.totalPrice} </p>
 									</Card.Text>
-
 									{!paymentStatus && (
 										<div>
 											{JSON.parse(localStorage.getItem('order')).paymentMethod === 'paypal' &&
 											order.isPaid === false ? (
-												<PayPalButton
-													createOrder={(data, actions) => createOrder(data, actions)}
-													onApprove={(data, actions) => onApprove(data, actions)}
-													onError={(error) => onError(error)}
-												/>
+												<>
+													<PayPalButton
+														createOrder={(data, actions) => createOrder(data, actions)}
+														onApprove={(data, actions) => onApprove(data, actions)}
+														onError={(error) => onError(error)}
+													/>
+													<div>
+														<Card style={{ maxWidth: '100%', marginTop: '20px' }}>
+															<Card.Body>
+																<Card.Title>Test Card Details</Card.Title>
+																<Card.Text>
+																	<h6>
+																		Country
+																		<span> - Australia</span>
+																	</h6>
+																	<h6>
+																		Card Number
+																		<span> - 4242 4242 4242 4242</span>
+																	</h6>
+																	<h6>
+																		Expiry Date<span> - 11/33</span>
+																	</h6>
+																	<h6>
+																		Security Code <span> - 424</span>
+																	</h6>
+																	<h6>
+																		Name <span> - John Doe</span>
+																	</h6>
+																	<h6>
+																		Address 1<span> - 51 Wollombi Street</span>
+																	</h6>
+
+																	<h6>
+																		Town/City
+																		<span> - Broke</span>
+																	</h6>
+																	<h6>
+																		State <span> - New South Wales</span>
+																	</h6>
+																	<h6>
+																		Postal Code <span> - 2330</span>
+																	</h6>
+																	<h6>
+																		Mobile No <span> - 049151-5141</span>
+																	</h6>
+																	<h6>
+																		Email Address <span> - test@gmail.com</span>
+																	</h6>
+																</Card.Text>
+															</Card.Body>
+														</Card>
+													</div>
+												</>
 											) : (
 												''
 											)}
@@ -186,12 +213,29 @@ const Payment = () => {
 											)}
 										</div>
 									)}
+									{JSON.parse(localStorage.getItem('order')).isPaid && <h3>Order - Paid</h3>}
+								</Card.Body>
+							</Card>
+						</Col>
 
-									{!paymentStatus && (
-										<div>
-											<h2>Order - Paid</h2>
-										</div>
-									)}
+						<Col style={{ marginLeft: '20px', maxWidth: '100%' }}>
+							<Card style={{ width: '45rem', marginTop: '20px' }}>
+								<Card.Body>
+									<Card.Title>Shipping Details</Card.Title>
+									<Card.Text>
+										<h6>
+											Address - <span>{order.shippingAddress?.address}</span>
+										</h6>
+										<h6>
+											Country - <span>{order.shippingAddress?.country}</span>
+										</h6>
+										<h6>
+											City - <span>{order.shippingAddress?.city}</span>
+										</h6>
+										<h6>
+											Postal Code - <span>{order.shippingAddress?.postalCode}</span>
+										</h6>
+									</Card.Text>
 								</Card.Body>
 							</Card>
 						</Col>

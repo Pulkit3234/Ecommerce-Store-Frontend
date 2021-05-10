@@ -11,14 +11,23 @@ import Footer from './components/Layout/Footer';
 import Order from './components/Order'
 import Payment from './components/Payment';
 import OrderSuccess from './components/OrderSuccess';
+import OrderHistory from './components/OrderHistory';
+import EditProfile from './components/EditProfile';
 
 function App() {
 	return (
 		<>
 			<Header />
 			<Switch>
-				<Route path='/order/:id/success' exact>
-					<OrderSuccess/>
+				<Route path='/profile/edit'>
+					<EditProfile/>
+
+				</Route>
+				<Route path="/orders/history" exact>
+					<OrderHistory/>
+				</Route>
+				<Route path="/order/:id/success" exact>
+					<OrderSuccess />
 				</Route>
 				<Route path="/order/:id" exact>
 					<Payment />

@@ -77,12 +77,19 @@ const CheckoutForm = ({ data: value, paymentSuccess }) => {
 	return (
 		<>
 			<div>
-				<p>Test Card Number - 4242 4242 4242 4242</p>
+				<p>
+					Test Card Number - 4242 4242 4242 4242<span style={{ margin: '50px' }}> MM/YY - 11/33</span>
+				</p>
+				<p>
+					CVC - 111<span style={{ margin: '50px' }}> ZIP - 11111</span>
+				</p>
+
 				<form id="payment-form" onSubmit={handleSubmit}>
 					<CardElement option={cardStyle} id="card-element" />
 					<button id="submit" style={{ marginTop: '40px' }} disabled={!stripe}>
 						Pay ${value.totalPrice}
 					</button>
+					{processing && <h5>Processing.....</h5>}
 				</form>
 			</div>
 		</>

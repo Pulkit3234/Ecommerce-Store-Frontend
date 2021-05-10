@@ -113,7 +113,8 @@ const Order = () => {
 													Total Items - {JSON.parse(localStorage.getItem('state')).totalItems}
 												</p>
 												<p style={{ fontWeight: 'bold' }}>
-													Total Price - ${JSON.parse(localStorage.getItem('state')).totalPrice}
+													Total Price - $
+													{JSON.parse(localStorage.getItem('state')).totalPrice}
 												</p>
 											</Card.Text>
 											<div class="form-check" style={{ marginBottom: '15px' }}>
@@ -126,7 +127,7 @@ const Order = () => {
 													onChange={(e) => setPayment(e.target.value)}
 												/>
 												<label class="form-check-label" for="flexRadioDefault1">
-													Stripe
+													Stripe <i class="fab fa-cc-stripe " style={{ color: 'blue' }}></i>
 												</label>
 											</div>
 											<div class="form-check">
@@ -139,7 +140,7 @@ const Order = () => {
 													onClick={(e) => setPayment(e.target.value)}
 												/>
 												<label class="form-check-label" for="flexRadioDefault1">
-													Paypal
+													Paypal <i class="fab fa-cc-paypal" style={{ color: 'blue' }}></i>
 												</label>
 											</div>
 

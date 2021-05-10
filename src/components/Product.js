@@ -14,7 +14,7 @@ const Product = () => {
 
 	const cart = useSelector((state) => state.cart);
 	console.log(cart);
-	console.log(JSON.parse(localStorage.getItem('state')))
+	console.log(JSON.parse(localStorage.getItem('state')));
 
 	console.log(id);
 
@@ -79,30 +79,15 @@ const Product = () => {
 									variant="primary"
 									style={{ width: '20%', marginTop: '10%' }}
 									onClick={addToCartHandler}
+									disabled={data.countInStock === 0}
 								>
 									Add To Cart
 								</Button>
 							)}
-							<Button
-								variant="success"
-								style={{ width: '20%', marginTop: '10%', marginLeft: '10px' }}
-								onClick={() => wishListHandler(data)}
-							>
-								{cart.wishlist.findIndex((item) => item._id === data._id) !== -1
-									? 'wishlistButton'
-									: 'Remove from Wishlist'}
-							</Button>
+							
 						</Col>
 					</Row>
-					<Col>
-						<h2 style={{ marginLeft: '10%' }}>No Reviews Yet</h2>
-						<h4 style={{ marginLeft: '10%' }}>
-							Write a Review
-							<span style={{ cursor: 'pointer' }}>
-								<i class="far fa-plus-square"></i>
-							</span>
-						</h4>
-					</Col>
+					
 				</div>
 			)}
 		</>

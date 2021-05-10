@@ -16,7 +16,8 @@ const Footer = () => {
 					bottom: '0',
                     left: '0',
                     width: '100%',
-                    color : 'white'
+					color: 'white',
+					zIndex : '1'
 				}}
 			>
 				Made with <i class="fas fa-heart" style={{ color: 'red', margin: '7px' }}></i> by Pulkit Sharma
