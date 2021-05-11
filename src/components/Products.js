@@ -17,7 +17,7 @@ const Products = () => {
 
 			try {
 
-				const { data } = await axios.get('http://localhost:8000/products');
+				const { data } = await axios.get('https://shoppall.herokuapp.com/products');
 				console.log(data);
 				setProducts(data);
 				setLoading(false);

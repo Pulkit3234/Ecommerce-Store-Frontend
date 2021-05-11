@@ -30,7 +30,7 @@ const EditProfile = () => {
 
 		try {
 			const { data } = await axios.post(
-				'http://localhost:8000/profile/edit',
+				'https://shoppall.herokuapp.com/profile/edit',
 				{
 					name,
 					email,

@@ -1,6 +1,6 @@
 import { Col, Row, Container, ListGroup, Card, Button } from 'react-bootstrap';
 import { useSelector, useDispatch } from 'react-redux';
-import { useEffect, useState } from 'react';
+import {  useState } from 'react';
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { useHistory } from 'react-router-dom';
@@ -23,7 +23,7 @@ const Payment = () => {
 	const paymentSuccess = async () => {
 		try {
 			const { data } = await axios.post(
-				'http://localhost:8000/cart/orderstatus',
+				'https://shoppall.herokuapp.com/cart/orderstatus',
 				{
 					isPaid: true,
 					orderId: JSON.parse(localStorage.getItem('order'))?._id,
@@ -58,7 +58,7 @@ const Payment = () => {
 					description: 'Shop All Order',
 					amount: {
 						value: order.totalPrice,
-						currency: 'INR',
+						currency: 'USD',
 					},
 				},
 			],

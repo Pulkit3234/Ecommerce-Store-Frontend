@@ -19,7 +19,7 @@ const SignIn = () => {
 		e.preventDefault();
 
 		if (toggle) {
-			const { data } = await axios.post('http://localhost:8000/signup', {
+			const { data } = await axios.post('https://shoppall.herokuapp.com/signup', {
 				name,
 				email,
 				password,
@@ -30,7 +30,7 @@ const SignIn = () => {
 				setToggle(!toggle);
 			}
 		} else {
-			const { data } = await axios.post('http://localhost:8000/signin', {
+			const { data } = await axios.post('https://shoppall.herokuapp.com/signin', {
 				email,
 				password,
 			});

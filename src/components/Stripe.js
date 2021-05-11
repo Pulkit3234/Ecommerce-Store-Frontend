@@ -33,7 +33,7 @@ const CheckoutForm = ({ data: value, paymentSuccess }) => {
 	console.log(value);
 	const createPaymentIntent = async () => {
 		try {
-			const { data } = await axios.post('http://localhost:8000/payment', { value });
+			const { data } = await axios.post('https://shoppall.herokuapp.com/payment', { value });
 			console.log(data);
 			setClientSecret(data.clientSecret);
 		} catch (error) {

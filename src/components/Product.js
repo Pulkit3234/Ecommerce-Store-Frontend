@@ -34,7 +34,7 @@ const Product = () => {
 
 	useEffect(() => {
 		const fetch = async () => {
-			const { data } = await axios.get(`http://localhost:8000/product/${id}`);
+			const { data } = await axios.get(`https://shoppall.herokuapp.com/product/${id}`);
 			console.log(data);
 
 			setData(data);

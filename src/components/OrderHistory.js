@@ -9,7 +9,7 @@ const SuccessfulOrders = () => {
 	useEffect(() => {
 		const fetch = async () => {
 			try {
-				const { data } = await axios.get('http://localhost:8000/paid', {
+				const { data } = await axios.get('https://shoppall.herokuapp.com/paid', {
 					headers: {
 						Authorization: `Bearer ${JSON.parse(localStorage.getItem('authState')).token}`,
 					},

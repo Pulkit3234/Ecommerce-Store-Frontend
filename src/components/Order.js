@@ -1,8 +1,8 @@
 import { Col, Row, Container, ListGroup, Card, Button, InputGroup, FormControl } from 'react-bootstrap';
 import { useSelector, useDispatch } from 'react-redux';
-import { useEffect, useRef, useState } from 'react';
+import { useRef, useState } from 'react';
 import { orderActions } from '../store/OrderSlice';
-import  axios  from 'axios';
+import axios from 'axios';
 import { useHistory } from 'react-router-dom';
 
 const Order = () => {
@@ -12,23 +12,24 @@ const Order = () => {
 	const cartState = useSelector((state) => state.cart);
 	const dispatch = useDispatch();
 	const history = useHistory();
-	const inputRef = useRef();
+	const [loading, setLoading] = useState(false);
 	const [payment, setPayment] = useState('');
-	
+
 	const { address, city, postalCode, country } = JSON.parse(localStorage.getItem('shippingAddress'));
 
 	const placeOrderHandler = () => {
 		console.log(payment);
+		setLoading(true);
 		const sendCartData = async () => {
 			try {
 				const { data } = await axios.post(
-					'http://localhost:8000/cart',
+					'https://shoppall.herokuapp.com/cart',
 					{
 						...cartState,
 						shippingAddress: {
 							...JSON.parse(localStorage.getItem('shippingAddress')),
 						},
-						paymentMethod : payment
+						paymentMethod: payment,
 					},
 					{
 						headers: {
@@ -39,7 +40,7 @@ const Order = () => {
 
 				console.log(data);
 				dispatch(orderActions.currentOrderHandler(data));
-				
+				setLoading(false);
 				history.push(`/order/${JSON.parse(localStorage.getItem('order'))._id}`);
 			} catch (error) {
 				console.log(error.message);
@@ -49,7 +50,6 @@ const Order = () => {
 		if (payment) {
 			sendCartData();
 		}
-		
 	};
 
 	console.log(JSON.parse(localStorage.getItem(state)));
@@ -73,7 +73,9 @@ const Order = () => {
 		);
 	});
 
-	return (
+	return loading ? (
+		<h2 style={{textAlign : 'center', marginTop : '40px'}}>Loading......</h2>
+	) : (
 		<>
 			{isAuth ? (
 				<>
